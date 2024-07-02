@@ -6,7 +6,7 @@ public class Destino {
     private String localizacao;
     private String descricao;
     private double avaliacaoMedia;
-
+    private int numAvaliacoes; 
 
     public Destino() {}
 
@@ -16,8 +16,8 @@ public class Destino {
         this.localizacao = localizacao;
         this.descricao = descricao;
         this.avaliacaoMedia = avaliacaoMedia;
+        this.numAvaliacoes = 0; 
     }
-
 
     public Long getId() {
         return id;
@@ -59,6 +59,13 @@ public class Destino {
         this.avaliacaoMedia = avaliacaoMedia;
     }
 
+    public int getNumAvaliacoes() {
+        return numAvaliacoes;
+    }
+
+    public void setNumAvaliacoes(int numAvaliacoes) {
+        this.numAvaliacoes = numAvaliacoes;
+    }
 
     @Override
     public int hashCode() {

@@ -30,28 +30,35 @@ public class DestinoControlador {
     }
 
     @GetMapping("/pesquisar")
-    public ResponseEntity<List<Destino>> pesquisarDestinos(@RequestParam String nome, @RequestParam String local) {
-        List<Destino> destinos = destinoServico.pesquisarDestinos(nome, local);
-        return new ResponseEntity<>(destinos, HttpStatus.OK);
+    public ResponseEntity<List<Destino>> pesquisarDestinos(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String localizacao) {
+        List<Destino> destinos = destinoServico.pesquisarDestinos(nome, localizacao);
+        return ResponseEntity.ok(destinos);
     }
+    
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Destino>> visualizarDestino(@PathVariable Long id) {
+    public ResponseEntity<Destino> visualizarDestino(@PathVariable Long id) {
         Optional<Destino> destinoOpt = destinoServico.obterDestino(id);
-        if (destinoOpt.isPresent()) {
-            return new ResponseEntity<>(destinoOpt, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return destinoOpt.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{id}/avaliar")
     public ResponseEntity<Destino> avaliarDestino(@PathVariable Long id, @RequestParam int nota) {
-        Destino destinoAvaliado = destinoServico.avaliarDestino(id, nota);
-        if (destinoAvaliado != null) {
-            return new ResponseEntity<>(destinoAvaliado, HttpStatus.OK);
+        try {
+            Destino destinoAvaliado = destinoServico.avaliarDestino(id, nota);
+            if (destinoAvaliado != null) {
+                return ResponseEntity.ok(destinoAvaliado);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirDestino(@PathVariable Long id) {
