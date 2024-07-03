@@ -1,12 +1,19 @@
 package com.example.api_viagem.modelo;
 
+import javax.persistence.*;
+
+@Entity
 public class Destino {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
     private String localizacao;
     private String descricao;
     private double avaliacaoMedia;
-    private int numAvaliacoes; 
+    private int numAvaliacoes;
 
     public Destino() {}
 
@@ -16,7 +23,7 @@ public class Destino {
         this.localizacao = localizacao;
         this.descricao = descricao;
         this.avaliacaoMedia = avaliacaoMedia;
-        this.numAvaliacoes = 0; 
+        this.numAvaliacoes = 0;
     }
 
     public Long getId() {
